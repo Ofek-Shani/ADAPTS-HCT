@@ -8,18 +8,15 @@ import GenericPopup from "../GenericPopup";
 import CountdownTimer from "../CountdownTimer";
 
 
+const DEBUG_WEBVIEW_URL = "https://tnaqua.org/live/penguins-rock/";
+
 // TODO: Add typedoc info on the type of "navigation" -- seriously what is it?
-export default function TitleScreen({navigation}) {
+export default function DebugScreen({navigation}) {
   const [showTestPopup, setShowTestPopup] = useState(false);
 
   return (
       <View style={{ flex: 1, alignItems: 'center'}}>
-        <View style={{flexDirection: 'row', margin:5}}>
-          {/* Header -- images and text in the middle */}
-          <Image style={{flex: 0.25, aspectRatio: 1}}source={require("../../assets/placeholders/debug-penguin-helmet.png")}/>
-          <Text style={{flex: 0.5}}>Welcome to the Testing zone! This is a Developer Menu meant for feature testing.</Text>
-          <Image style={{flex: 0.25, aspectRatio: 1, transform: [{ scaleX: -1 }]}}source={require("../../assets/placeholders/debug-penguin-helmet.png")}/>
-        </View>
+        <DebugHeader/>
         <View>
           {/* Multiple Choice Demo Component */}
           <MultipleChoiceDemo/>
@@ -28,6 +25,12 @@ export default function TitleScreen({navigation}) {
           <Pressable style={styles.navigationButton} onPress={()=>setShowTestPopup(true)}>
             <Text style={styles.navigationText}>Debug: Press to show Med Log Popup</Text>
           </Pressable>
+          <GenericPopup visible={showTestPopup} horizontalMargins={0.04}>
+            <Text>Medication Reporting Widget</Text>
+            <Pressable style={styles.navigationButton} onPress={()=>setShowTestPopup(false)}>
+              <Text style={styles.navigationText}>Close Widget</Text>
+            </Pressable>
+          </GenericPopup>
           {/* Calendar Testing */}
           <Pressable style={styles.navigationButton} onPress={()=> navigation.navigate('CalendarDemo')}>
             <Text style={styles.navigationText}>Navigate to Calendar Test Screen</Text>
@@ -37,15 +40,27 @@ export default function TitleScreen({navigation}) {
           <CountdownTimer countdownTarget={new Date(2024, 6, 3)} countdownReference={new Date(2025, 6, 2)}/>
           <CountdownTimer countdownTarget={new Date(2025, 8, 2)} showTarget={true}/>
           <CountdownTimer countdownTarget={new Date(2026, 7, 31)}/>
-
-          <GenericPopup visible={showTestPopup} horizontalMargins={0.04}>
-            <Text>Medication Reporting Widget</Text>
-            <Pressable style={styles.navigationButton} onPress={()=>setShowTestPopup(false)}>
-              <Text style={styles.navigationText}>Close Widget</Text>
-            </Pressable>
-          </GenericPopup>
+          {/* Webview Screen Testing */}
+          <Pressable style={styles.navigationButton} onPress={()=> navigation.navigate("WebView", {url: DEBUG_WEBVIEW_URL})}>
+            <Text style={styles.navigationText}>Test Webview Screen</Text>
+          </Pressable>
+          
         </View>
       </View>
+  );
+}
+
+/**
+ * The header that shows up on the debug menu screen. This component is just for fun, and has no actual use.
+ */
+function DebugHeader(): ReactNode {
+  return (
+    <View style={{flexDirection: 'row', margin:5}}>
+      {/* Header -- images and text in the middle */}
+      <Image style={{flex: 0.25, aspectRatio: 1}} source= {require("../../assets/placeholders/debug-penguin-helmet.png")}/>
+      <Text style={{flex: 0.5}}>Welcome to the Testing zone! This is a Developer Menu meant for feature testing.</Text>
+      <Image style={{flex: 0.25, aspectRatio: 1, transform: [{ scaleX: -1 }]}}source={require("../../assets/placeholders/debug-penguin-helmet.png")}/>
+    </View>
   );
 }
 
